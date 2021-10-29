@@ -51,10 +51,42 @@ function normalizePort(val) {
   return false;
 }
 
+function doSQL(sql,con)
+{
+  con.query(sql,function (err,result){
+    if (err) throw err;
+    console.log("1 record inserted");
+  })
+}
+
+function makeUser(con,username,password,team)
+{
+  let sql = "INSERT INTO user(tp,name,team) VALUES (0,\""+username+"\","+team+")";
+  doSQL(sql,con);
+}
+
+function makeTeam(con,name,pm)
+{
+  let sql = "INSERT INTO team(tp,name,pm) VALUES (0,\""+name+"\","+pm+")";
+  doSQL(sql,con);
+}
+
+function makeTask(con,name,user)
+{
+  let sql = "INSERT INTO task(name,user) VALUES (\""+name+"\","+user+")";
+  doSQL(sql,con);
+}
+
+function makeMilestone(con,team,reward,tp_needed,name)
+{
+  let sql = "INSERT INTO milestone(team,reward,tp_needed,name) VALUES ("+team+",\""+reward+"\","+tp_needed+",\""+name+"\")";
+  doSQL(sql,con);
+}
+
 var con = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "",
+  password: "ShayKing80",
   database: "gimep"
 });
 
