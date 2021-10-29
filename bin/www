@@ -7,6 +7,8 @@
 var app = require('../app');
 var debug = require('debug')('teampoints:server');
 var http = require('http');
+var mysql = require('mysql')
+
 
 /**
  * Get port from environment and store in Express.
@@ -48,6 +50,18 @@ function normalizePort(val) {
 
   return false;
 }
+
+var con = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "gimep"
+});
+
+con.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected")
+});
 
 /**
  * Event listener for HTTP server "error" event.
