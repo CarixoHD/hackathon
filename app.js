@@ -89,7 +89,6 @@ sql.con.query(sqlLine,function(err,result){
     ));
   }
   json = JSON.stringify(user);
-  console.log(json);
 });
 var loginRouter = require('./routes/login')
 var tasksRouter = require('./routes/tasks')
