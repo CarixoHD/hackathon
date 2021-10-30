@@ -54,6 +54,14 @@ function normalizePort(val) {
  * Event listener for HTTP server "error" event.
  */
 
+let user_name = "Matthew Doe";
+let user_team = "1";
+let sql = "INSERT INTO user (tp,name,team) VALUES (0, \"Matthew Doe\",1)";
+con.query(sql, function(err, result) {
+  if(err) throw err;
+  console.log("Inserted")
+});
+
 function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
