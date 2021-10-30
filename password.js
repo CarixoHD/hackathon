@@ -1,3 +1,3 @@
 module.exports = {
-    password: "LOL"
+    password: "PATRICK SIN TISS ER LITEN"
 };
