@@ -56,6 +56,7 @@ function doSQL(sql,con)
   con.query(sql,function (err,result){
     if (err) throw err;
     console.log("1 record inserted");
+    return result
   })
 }
 
@@ -81,6 +82,11 @@ function makeMilestone(con,team,reward,tp_needed,name)
 {
   let sql = "INSERT INTO milestone(team,reward,tp_needed,name) VALUES ("+team+",\""+reward+"\","+tp_needed+",\""+name+"\")";
   doSQL(sql,con);
+}
+
+function logIn(con,username,password)
+{
+  let sql = "SELECT "
 }
 
 var con = mysql.createConnection({

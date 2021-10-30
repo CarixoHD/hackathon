@@ -31,5 +31,12 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+function post(path,data)
+{
+  app.post(path,function(req,res) {
+    res.send(data);
+  });
+}
+
 
 module.exports = app;
