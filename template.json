@@ -1,0 +1,68 @@
+{
+    "userId":0,
+    "username":"Andreas",
+    "team": {
+        "id":0,
+        "name":"The best team ever",
+        "milestones": [
+            {
+                "id":0,
+                "order":0,
+                "reward":"Kart!",
+                "tpNeeded":50,
+                "done":true
+            },
+            {
+                "id":3,
+                "order":1,
+                "reward":"Escape game!",
+                "tpNeeded":30,
+                "done":true
+            },
+            {
+                "id":2,
+                "order":2,
+                "reward":"Online party game!",
+                "tpNeeded":40,
+                "done":false
+            }
+        ]
+    },
+    "tasks": [
+        {
+            "id":2,
+            "tp":3,
+            "completed":true,
+            "name":"Do the reporting",
+            "description":"Do the reporting with Word, 50 pages"
+        },
+        {
+            "id":0,
+            "tp":5,
+            "completed":false,
+            "name":"Make the project presentation",
+            "description":"Should last 15 mins"
+        },
+        {
+            "id":1,
+            "tp":1,
+            "completed":true,
+            "name":"Contact Cisco partners",
+            "description":"About the new idea for the project"
+        },
+        {
+            "id":4,
+            "tp":10,
+            "completed":false,
+            "name":"Finish the code for the presentation",
+            "description":""
+        },
+        {
+            "id":3,
+            "tp":1,
+            "completed":false,
+            "name":"Send invites for the next meeting",
+            "description":"Max 5 persons in the room: Covid restrictions ;("
+        }
+    ]
+}
