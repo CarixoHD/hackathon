@@ -1,11 +1,16 @@
 var express = require('express');
+const { getTasks } = require('../sql');
 var sql = require('../sql')
 var router = express.Router();
 
 router.get('/', function(req, res, next) {
-    res.status(200).send({
-    status: 200
-  })
+    getTasks()
+    .then((res) => {
+      res.status(200).send(res)
+    })
+    .catch((err) => {
+      res.status(500).send(err)
+    })
 });
 
 router.post("/update", function(req, res, next) {

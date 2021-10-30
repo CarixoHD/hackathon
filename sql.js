@@ -7,7 +7,7 @@ var con = mysql.createConnection({
     database: "gimep"
 });
   
-  con.connect(function(err) {
+con.connect(function(err) {
     if (err) throw err;
     console.log("Connected")
 });
@@ -15,8 +15,8 @@ var con = mysql.createConnection({
 
 function doSQL(sql)
 {
-    con.query(sql,function (err,result){
-        if (err) throw err;
+    return con.query(sql,function (err,result){
+        if (err) return err;
         return result;
     });
 }
@@ -77,6 +77,35 @@ function changeStatus(taskId, table, status) {
     return doSQL(sql);
 }
 
+function getTasks(){
+  let user = new User(6);
+
+  let selectUserTask = `SELECT COUNT(task.id) AS tasksDone, user.id AS userId, user.name AS userName, team.id AS teamId, team.name AS teamName
+  FROM task 
+  INNER JOIN user, team 
+  WHERE user.team = team.id 
+  AND task.user = user.id 
+  AND task.status = 0 
+  AND user.id = ${user.id};`;
+  let selectTask = `SELECT task.id, task.status, task.name, task.descript FROM task WHERE task.user = ${user.id}`;
+  let selectMilestone = `SELECT milestone.id, milestone.reward, milestone.status FROM milestone,user WHERE milestone.team = user.team AND user.id = ${user.id};`;
+  return Promise.all([doSQL(selectUserTask), doSQL(selectTask), doSQL(selectMilestone)])
+  .then((result1, result2, result3) => {
+  
+    user.id = result1[0].userId;
+    user.name = result1[0].userName;
+    user.team = new Team(result1[0].teamId,result1[0].teamName);
+
+    user.tasks = result2.map(task => new Task(task.id,task.status,task.name,task.descript))
+
+    user.team.milestones = result3.map(milestone => new Milestone(
+      milestone.id,milestone.id,milestone.reward,milestone.status
+    ))
+    return JSON.stringify(user);
+  });
+}
+
+
 // function update(field, )
 
 
@@ -89,6 +118,7 @@ var sql = {
     makeMilestone: makeMilestone,
     selectSpecificFrom: selectSpecificFrom,
     msPro: milestoneProgress,
-    changeStatus: changeStatus
+    changeStatus: changeStatus,
+    getTasks: getTasks
 }
 module.exports = sql
