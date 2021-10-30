@@ -1,16 +1,17 @@
 var mysql = require('mysql')
-
+var password = require('./password')
 var con = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "Climate_Denier1337",
+    password: password.password,
     database: "gimep"
 });
-      
-con.connect(function(err) {
+  
+  con.connect(function(err) {
     if (err) throw err;
     console.log("Connected")
 });
+  
 
 function doSQL(sql)
 {
@@ -71,6 +72,12 @@ function milestoneProgress(milestone,userid)
     return progress;
 }
 
+function changeStatus(taskId, table, status) {
+    let sql = `UPDATE ${table} SET status = ${status} WHERE id = ${taskId}`;
+    return doSQL(sql);
+}
+
+// function update(field, )
 
 
 var sql = {
@@ -81,6 +88,7 @@ var sql = {
     makeTask: makeTask,
     makeMilestone: makeMilestone,
     selectSpecificFrom: selectSpecificFrom,
-    msPro: milestoneProgress
+    msPro: milestoneProgress,
+    changeStatus: changeStatus
 }
 module.exports = sql
