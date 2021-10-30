@@ -3,14 +3,14 @@ var password = require('./password')
 var con = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: password,
+    password: password.password,
     database: "gimep"
-  });
+});
   
   con.connect(function(err) {
     if (err) throw err;
     console.log("Connected")
-  });
+});
   
 
 function doSQL(sql)
@@ -58,6 +58,12 @@ function selectSpecificFrom(table, field, value) {
 
 }
 
+function changeStatus(taskId, table, status) {
+    let sql = `UPDATE ${table} SET status = ${status} WHERE id = ${taskId}`;
+    return doSQL(sql);
+}
+
+// function update(field, )
 
 
 var sql = {
@@ -65,6 +71,7 @@ var sql = {
     makeUser: makeUser,
     makeTeam: makeTeam,
     makeTask: makeTask,
-    makeMilestone: makeMilestone
+    makeMilestone: makeMilestone,
+    changeStatus: changeStatus
 }
 module.exports = sql
