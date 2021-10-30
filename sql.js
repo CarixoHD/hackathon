@@ -1,8 +1,9 @@
 var mysql = require('mysql')
+var password = require('./password')
 var con = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "",
+    password: password,
     database: "gimep"
   });
   
