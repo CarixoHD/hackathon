@@ -7,6 +7,9 @@ var sql = require('./sql');
 var app = express();
 var mslogic = require('./milestoneLogic');
 const { makeUser } = require('./sql');
+const { doesNotMatch } = require('assert');
+
+
 var loginRouter = require('./routes/login')
 var tasksRouter = require('./routes/tasks')
 var cors = require('cors');
@@ -45,8 +48,8 @@ function post(path,data)
   });
 }
 
-/*
-sql.makeTeam("Software","1")
+
+/*sql.makeTeam("Software","1")
 
 sql.makeUser("Jonathan Locke","ppp","1")
 sql.makeUser("Jonas Locke","ppp","1")

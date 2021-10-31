@@ -37,3 +37,10 @@ class Task{
     this.description = description;
   }
 }
+
+module.exports = {
+  User,
+  Team,
+  Milestone,
+  Task
+}

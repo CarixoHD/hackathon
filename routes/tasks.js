@@ -3,13 +3,16 @@ const { getTasks } = require('../sql');
 var sql = require('../sql')
 var router = express.Router();
 
+
+
 router.get('/', function(req, res, next) {
-    getTasks()
-    .then((res) => {
-      res.status(200).send(res)
+    getTasks(req.query.userId)
+    .then(result => {
+        res.status(200).send(result)
     })
-    .catch((err) => {
-      res.status(500).send(err)
+    .catch(err => {
+        console.log(err);
+        res.status(500).send(err)
     })
 });
 

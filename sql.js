@@ -1,5 +1,6 @@
 var mysql = require('mysql')
 var password = require('./password')
+var Models = require('./models')
 var con = mysql.createConnection({
     host: "localhost",
     user: "root",
@@ -15,9 +16,14 @@ con.connect(function(err) {
 
 function doSQL(sql)
 {
-    return con.query(sql,function (err,result){
-        if (err) return err;
-        return result;
+    return new Promise((resolve, reject) => {
+        con.query(sql,function (err,result){
+            if (err) {
+                reject(err)
+            }else{
+                resolve(result)
+            }
+        })
     });
 }
 
@@ -67,7 +73,6 @@ function milestoneProgress(milestone,userid)
     AND task.user = user.id 
     AND task.status = 1 
     AND user.id = ${userid};```);
-    console.log(milestonetp,tasksDoneByTeam);
     progress = milestonetp/tasksDoneByTeam;
     return progress;
 }
@@ -77,34 +82,50 @@ function changeStatus(taskId, table, status) {
     return doSQL(sql);
 }
 
-function getTasks(){
-  let user = new User(6);
+function getTasks(userId){
+  let user = new Models.User(userId);
 
   let selectUserTask = `SELECT COUNT(task.id) AS tasksDone, user.id AS userId, user.name AS userName, team.id AS teamId, team.name AS teamName
   FROM task 
   INNER JOIN user, team 
   WHERE user.team = team.id 
   AND task.user = user.id 
-  AND task.status = 0 
+  AND task.status = 1 
   AND user.id = ${user.id};`;
   let selectTask = `SELECT task.id, task.status, task.name, task.descript FROM task WHERE task.user = ${user.id}`;
-  let selectMilestone = `SELECT milestone.id, milestone.reward, milestone.status FROM milestone,user WHERE milestone.team = user.team AND user.id = ${user.id};`;
+  let selectMilestone = `SELECT milestone.id, milestone.reward FROM milestone,user WHERE milestone.team = user.team AND user.id = ${user.id};`;
   return Promise.all([doSQL(selectUserTask), doSQL(selectTask), doSQL(selectMilestone)])
-  .then((result1, result2, result3) => {
-  
-    user.id = result1[0].userId;
-    user.name = result1[0].userName;
-    user.team = new Team(result1[0].teamId,result1[0].teamName);
+  .then((result) => {
+    user.id = result[0][0].userId;
+    user.name = result[0][0].userName;
+    user.team = new Models.Team(result[0][0].teamId,result[0][0].teamName);
 
-    user.tasks = result2.map(task => new Task(task.id,task.status,task.name,task.descript))
+    user.tasks = result[1].map(task => new Models.Task(task.id,task.status,task.name,task.descript))
 
-    user.team.milestones = result3.map(milestone => new Milestone(
-      milestone.id,milestone.id,milestone.reward,milestone.status
-    ))
+    let tasksDone = result[0][0].tasksDone;
+
+    user.team.milestones = result[2].map(milestone => new Models.Milestone(
+      milestone.id,milestone.id,milestone.reward,0
+    ));
+    let life = 5;
+    for (i = 0; i < user.team.milestones.length; i++)
+    {
+        console.log(tasksDone);
+        if (tasksDone > life)
+        {
+            tasksDone -= life;
+            user.team.milestones[i].done = true;
+            user.team.milestones[i].health = 0;
+        }
+        else {
+            user.team.milestones[i].health = (life-tasksDone)/life;
+            user.team.milestones[i].done = false;
+        }
+    }
+    console.log(JSON.stringify(user));
     return JSON.stringify(user);
   });
 }
-
 
 // function update(field, )
 
